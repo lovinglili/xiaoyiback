@@ -42,7 +42,7 @@ const add=async (body)=>{
     const {nickName}=body;
     return UserModel.find({nickName}).then((result)=>{
         if(result.length!==0){
-            return {isAssign:false,message:"用户已存在"}
+            return {isAssign:false,message:"用户已存在",success:false}
         }else{
             return new UserModel({
                 ...body,
@@ -51,7 +51,7 @@ const add=async (body)=>{
                 formatTime:moment.format("YYYY-MM-DD, hh:mm")
         
             }).save().then(()=>{
-                return {isAssign:true};
+                return {isAssign:true,success:true};
             }).catch((err)=>{
                 return false;
             })

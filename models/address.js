@@ -11,18 +11,17 @@ var AddressModel=mongoose.model('address',new mongoose.Schema({
     more:String
 }));
 
-// 增加订单
+// 增加地址
 const addAddress=(body)=>{
     let _timestamp=Date.now();
-    let moment=Moment(_timestamp)
+    let moment=Moment(_timestamp);
     return new AddressModel({
         ...body,
         createTime:_timestamp,
         formatTime:moment.format("YYYY-MM-DD, hh:mm")
 
-    }).save().then(()=>{
-        
-        return {data:true};
+    }).save().then((result)=>{
+        return {success:true,currentAddress:result};
     }).catch((err)=>{
         return false;
     })

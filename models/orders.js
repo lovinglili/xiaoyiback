@@ -3,7 +3,7 @@ const Moment = require('moment')
 
 
 var OrdersModel=mongoose.model('orders',new mongoose.Schema({
-    addressId:Number, // 地址
+    addressId:String, // 地址
     nickName:String,
     goodId:String, // 商品Id
 }));
@@ -11,16 +11,15 @@ var OrdersModel=mongoose.model('orders',new mongoose.Schema({
 // 增加订单
 const addOrder=(body)=>{
     let _timestamp=Date.now();
-    let moment=Moment(_timestamp)
+    let moment=Moment(_timestamp);
     return new OrdersModel({
         ...body,
         createTime:_timestamp,
         formatTime:moment.format("YYYY-MM-DD, hh:mm")
 
     }).save().then(()=>{
-        
-        return {data:true};
-    }).catch((err)=>{
+        return {success:true};
+    }).catch(()=>{
         return false;
     })
 }
