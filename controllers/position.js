@@ -86,7 +86,6 @@ const assign= async (req,res)=>{
 
 // 注册
 const add=async (req,res)=>{
-    console.log(req.body,"res")
     res.set('content-type', 'application/json; charset=utf8');
     let _data=await users_model.add(req.body);
     let _err=errorData(_data,res,'position');
@@ -147,7 +146,7 @@ const addAddress=async (req,res)=>{
 }
 
 // 查询地址列表
-const getAddressList=async ()=>{
+const getAddressList=async (req,res)=>{
     res.set('content-type', 'application/json; charset=utf8');
     let _data=await address_model.getAddressList(req.query);
     let _err=errorData(_data,res,'position');
