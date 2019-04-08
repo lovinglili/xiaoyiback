@@ -11,7 +11,7 @@ router.post('/saveImg',fileUpload); // 存储图片
 router.post('/update',position_controller.update);// 编辑商品，改变商品的状态其实也是编辑
 router.post('/delete',position_controller.remove); // 删除，zh
 router.get('/detail',position_controller.getone);  // 获取某一个的详情
-// router.get('/changeStatus',function(req,res){position_controller.changeStatus}); // 改变商品状态,1:卖出，2:下架,0:正常
+router.get('/changeStatus',position_controller.changeStatus); // 改变商品状态,1:卖出，2:下架,0:正常
 
 router.post('/assign',position_controller.assign); // 登录
 router.post('/add',position_controller.add); // 注册

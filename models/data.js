@@ -96,6 +96,25 @@ const getone=(id)=>{
     })
  }
 
+ const changeStatus=async (query)=>{
+    const {id,status}=query;
+    return Position.find({_id: id}).then((results)=>{
+    delete results.status;
+    const params={
+        ...results,
+        status
+    }
+    console.log(results,"dsd")
+        return Position.updateOne({_id: id},params).then((result)=>{
+            return {success:true};
+        }).catch(()=>{
+            return false;
+        })
+    }).catch(()=>{
+        return false;
+    })
+ }
+
  const update=async (params)=>{
      var results= await getone(params);
      var flag=true;//判断图片是否更改的标志，true为更改
@@ -127,5 +146,6 @@ module.exports = {
     getone,
     update,
     list,
-    listall
+    listall,
+    changeStatus
 }

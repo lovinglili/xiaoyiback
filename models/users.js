@@ -20,7 +20,6 @@ const assign=async (body)=>{
             results[0].createTime=_timestamp,
             results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
             results[0].status=1;
-            console.log(results,"login")
         
             return UserModel.updateOne({nickName: nickName},{...results}).then(()=>{
                 return {isAssign:true};

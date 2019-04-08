@@ -62,6 +62,19 @@ const getone= async (req,res)=>{
     
 }
 
+// 改变商品的状态
+const changeStatus= async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    console.log(req.query,"query")
+    let _data=await position_model.changeStatus(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
+
 const update= async (req,res)=>{
     res.set('content-type', 'application/json; charset=utf8');
     let _data=await position_model.update(req.body);
@@ -168,5 +181,6 @@ module.exports={
     getOrderList,
     addOrder,
     getAddressList,
-    addAddress
+    addAddress,changeStatus
+
 }
