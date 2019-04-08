@@ -3,9 +3,16 @@ const Moment = require('moment')
 
 
 var OrdersModel=mongoose.model('orders',new mongoose.Schema({
-    addressId:String, // 地址
+    solderNickName:String, // 卖家的nickName
+    desc:String,
+    pics:Array,
+    price:String,
+    title:String,
+    categoryTitle:String,categoryId:String,
     nickName:String,
-    goodId:String, // 商品Id
+    addressId:String,
+    status:Number,// 该商品的状态
+    goodId:String // '所要购买的商品的id',
 }));
 
 // 增加订单
