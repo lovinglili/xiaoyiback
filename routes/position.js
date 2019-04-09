@@ -19,6 +19,9 @@ router.post('/quit',position_controller.quit); // 退出
 
 router.get('/orderList',position_controller.getOrderList); // 获取订单列表 ,根据nickName返回
 router.post('/addOrder',position_controller.addOrder); // 提交订单
+router.get('/deleteOrder',position_controller.deleteOrder) // 删除订单
+router.get('/changeOrderStatus',position_controller.changeOrderStatus) // 改变商品订单的状态, 1 卖出。
+
 
 router.post('/address',position_controller.addAddress);  // 新增收获地址
 router.get('/addressList',position_controller.getAddressList);  //获取地址列表,根据nickName返回

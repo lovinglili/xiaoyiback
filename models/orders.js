@@ -39,10 +39,40 @@ const getOrderList=(query)=>{
         }).catch((err)=>{
             return false;
         })
-    
 }
+
+// 取消订单
+const deleteOrder=(query)=>{
+    return OrdersModel.deleteOne({_id: query.orderId}).then(()=>{
+        return {success:true};
+    }).catch(()=>{
+        return false;
+    })
+}
+
+// 改变商品订单的状态
+
+const changeOrderStatus=async (query)=>{
+    const {id,status}=query;
+    return OrdersModel.find({_id: id}).then((results)=>{
+    delete results.status;
+    const params={
+        ...results,
+        status
+    }
+        return OrdersModel.updateOne({_id: id},params).then((result)=>{
+            return {success:true};
+        }).catch(()=>{
+            return false;
+        })
+    }).catch(()=>{
+        return false;
+    })
+ }
 
 module.exports ={
     getOrderList,
-    addOrder
+    addOrder,
+    deleteOrder,
+    changeOrderStatus
 }

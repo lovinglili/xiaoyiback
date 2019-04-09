@@ -143,6 +143,29 @@ const getOrderList= async (req,res)=>{
     })
 }
 
+// 取消订单
+const deleteOrder=async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await orders_model.deleteOrder(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
+// 改变商品的状态
+const changeOrderStatus= async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    console.log(req.query,"query")
+    let _data=await orders_model.changeOrderStatus(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+} 
+
 
 
 // 收货模块
@@ -181,6 +204,8 @@ module.exports={
     getOrderList,
     addOrder,
     getAddressList,
-    addAddress,changeStatus
-
+    addAddress,
+    changeStatus,
+    deleteOrder,
+    changeOrderStatus
 }

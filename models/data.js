@@ -66,7 +66,7 @@ const save=(body)=>{
 
     }).save().then(()=>{
         
-        return {data:true};
+        return {success:true};
     }).catch((err)=>{
         return false;
     })
@@ -104,7 +104,6 @@ const getone=(id)=>{
         ...results,
         status
     }
-    console.log(results,"dsd")
         return Position.updateOne({_id: id},params).then((result)=>{
             return {success:true};
         }).catch(()=>{

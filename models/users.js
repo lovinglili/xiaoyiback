@@ -22,7 +22,7 @@ const assign=async (body)=>{
             results[0].status=1;
         
             return UserModel.updateOne({nickName: nickName},{...results}).then(()=>{
-                return {isAssign:true};
+                return {isAssign:true,success:true};
             }).catch(()=>{
                 return false;
             })
@@ -78,7 +78,7 @@ const quit= async (body)=>{
     results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
     results[0].status=0;
     return UserModel.updateOne({nickName: nickName},{...results}).then((result)=>{
-        return {isAssign:false};
+        return {isAssign:false,success:true};
     }).catch(()=>{
         return false;
     })
