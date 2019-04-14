@@ -76,8 +76,18 @@ const changeStatus= async (req,res)=>{
 
 
 const update= async (req,res)=>{
+
     res.set('content-type', 'application/json; charset=utf8');
-    let _data=await position_model.update(req.body);
+    let imgsArray=[];
+    let imgUrl='';
+    const {pics}=req.body;
+    const picsName=pics.substring(12);
+    imgUrl='/uploads/logos/'+picsName;
+    imgsArray.push(imgUrl);
+    if(req.body.pics){delete req.body.pics;}
+    
+    const realData={...req.body,pics:imgsArray}
+    let _data=await position_model.update(realData);
     let _err=errorData(_data,res,'position');
     if( _err )res.render('position',{
         code:200,
