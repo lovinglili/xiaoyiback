@@ -123,7 +123,6 @@ const getone=(id)=>{
          params.formatTime=moment.format("YYYY-MM-DD, hh:mm")
             return Position.updateOne({_id: _id},params).then((result)=>{
                 return {success:true};
-
             }).catch(()=>{
                 return false;
             })
