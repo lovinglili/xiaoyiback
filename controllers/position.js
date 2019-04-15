@@ -202,6 +202,17 @@ const getAddressList=async (req,res)=>{
     })
 }
 
+// 删除收获地址
+const deleteAddress=async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await address_model.deleteAddress(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
 module.exports={
     save,
     remove,
@@ -217,5 +228,6 @@ module.exports={
     addAddress,
     changeStatus,
     deleteOrder,
-    changeOrderStatus
+    changeOrderStatus,
+    deleteAddress
 }

@@ -25,6 +25,7 @@ router.get('/changeOrderStatus',position_controller.changeOrderStatus) // 改变
 
 router.post('/address',position_controller.addAddress);  // 新增收获地址
 router.get('/addressList',position_controller.getAddressList);  //获取地址列表,根据nickName返回
+router.get('/deleteAddress',position_controller.deleteAddress)
 
 
 module.exports=router;

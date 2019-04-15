@@ -40,7 +40,17 @@ const getAddressList = (query) => {
 
 }
 
+// 删除收获地址
+const deleteAddress=(query)=>{
+    return AddressModel.deleteOne({_id: query.addressId}).then(()=>{
+        return {success:true};
+    }).catch(()=>{
+        return false;
+    })
+}
+
 module.exports = {
     getAddressList,
-    addAddress
+    addAddress,
+    deleteAddress
 }
