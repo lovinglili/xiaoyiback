@@ -20,7 +20,6 @@ const assign=async (body)=>{
             results[0].createTime=_timestamp,
             results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
             results[0].status=1;
-        
             return UserModel.updateOne({nickName: nickName},{...results}).then(()=>{
                 return {isAssign:true,success:true};
             }).catch(()=>{
@@ -48,7 +47,6 @@ const add=async (body)=>{
                 status:1, // 1代表登录，0代表未登录
                 createTime:_timestamp,
                 formatTime:moment.format("YYYY-MM-DD, hh:mm")
-        
             }).save().then(()=>{
                 return {isAssign:true,success:true};
             }).catch((err)=>{

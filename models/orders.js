@@ -11,8 +11,8 @@ var OrdersModel=mongoose.model('orders',new mongoose.Schema({
     categoryTitle:String,categoryId:String,
     nickName:String,
     addressId:String,
-    status:Number,// 该商品的状态
-    goodId:String // '所要购买的商品的id',
+    goodId:String, // '所要购买的商品的id',
+    orderStatus:Number
 }));
 
 // 增加订单
@@ -53,12 +53,12 @@ const deleteOrder=(query)=>{
 // 改变商品订单的状态
 
 const changeOrderStatus=async (query)=>{
-    const {id,status}=query;
+    const {id,orderStatus}=query;
     return OrdersModel.find({_id: id}).then((results)=>{
-    delete results.status;
+    delete results.orderStatus;
     const params={
         ...results,
-        status
+        orderStatus
     }
         return OrdersModel.updateOne({_id: id},params).then((result)=>{
             return {success:true};

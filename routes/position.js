@@ -17,6 +17,10 @@ router.post('/assign',position_controller.assign); // 登录
 router.post('/add',position_controller.add); // 注册
 router.post('/quit',position_controller.quit); // 退出
 
+router.post('/addDeal',position_controller.addDeal); // 添加交易表
+router.get('/changeDealStatus',position_controller.changeDealStatus);
+
+
 router.get('/orderList',position_controller.getOrderList); // 获取订单列表 ,根据nickName返回
 router.post('/addOrder',position_controller.addOrder); // 提交订单
 router.get('/deleteOrder',position_controller.deleteOrder) // 删除订单
