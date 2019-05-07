@@ -107,6 +107,27 @@ const assign= async (req,res)=>{
     })
 }
 
+// 改变买家的余额并返回
+const changeBuyMoney = async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await users_model.changeBuyMoney(req.body);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
+const changeSolderMoney= async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await users_model.changeSolderMoney(req.body);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
 // 注册
 const add=async (req,res)=>{
     res.set('content-type', 'application/json; charset=utf8');
@@ -239,6 +260,8 @@ module.exports={
     list,
     add,
     quit,
+    changeBuyMoney,
+    changeSolderMoney,
     assign,
     addDeal,
     changeDealStatus,
