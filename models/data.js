@@ -63,10 +63,8 @@ const save=(body)=>{
         status:0,
         createTime:_timestamp,
         formatTime:moment.format("YYYY-MM-DD, hh:mm")
-
     }).save().then(()=>{
-        
-        return {data:true};
+        return {success:true};
     }).catch((err)=>{
         return false;
     })
@@ -96,30 +94,39 @@ const getone=(id)=>{
     })
  }
 
- const update=async (params)=>{
-     var results= await getone(params);
-     var flag=true;//判断图片是否更改的标志，true为更改
-     if(params.companyLogo==""){//图片没有更改
-        params.companyLogo=results[0].companyLogo;
-        flag=false;
-     }
-     if(results[0].companyLogo&&flag&&(results[0].companyLogo!="/uploads/logos/bg.jpg")){
-        fs.removeSync(PATH.resolve(__dirname, '../public'+results[0].companyLogo))
+ const changeStatus=async (query)=>{
+    const {id,status}=query;
+    return Position.find({_id: id}).then((results)=>{
+    delete results.status;
+    const params={
+        ...results,
+        status
     }
-     
-     if(params.republish)
-     {
+        return Position.updateOne({_id: id},params).then((result)=>{
+            return {success:true};
+        }).catch(()=>{
+            return false;
+        })
+    }).catch(()=>{
+        return false;
+    })
+ }
+
+ const update=async (params)=>{
+     const {_id}=params;
+    return Position.find({_id: _id}).then(()=>{
         let _timestamp=Date.now();
          let moment=Moment(_timestamp);
          params.createTime=_timestamp,
          params.formatTime=moment.format("YYYY-MM-DD, hh:mm")
-     }
- 
-    return Position.updateOne({_id: params._id},params).then((result)=>{
-        return result;
-    }).catch(()=>{
-        return false;
-    })
+            return Position.updateOne({_id: _id},params).then((result)=>{
+                return {success:true};
+            }).catch(()=>{
+                return false;
+            })
+        }).catch(()=>{
+            return false;
+        })
  }
 module.exports = {
     save,
@@ -127,5 +134,6 @@ module.exports = {
     getone,
     update,
     list,
-    listall
+    listall,
+    changeStatus
 }

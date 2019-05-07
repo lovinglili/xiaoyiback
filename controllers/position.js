@@ -4,6 +4,7 @@ var position_model=require('../models/data')
 var users_model=require('../models/users');
 var orders_model=require('../models/orders');
 var address_model=require('../models/address');
+var deals_model=require('../models/deals')
 
 
 
@@ -62,9 +63,31 @@ const getone= async (req,res)=>{
     
 }
 
-const update= async (req,res)=>{
+// 改变商品的状态
+const changeStatus= async (req,res)=>{
     res.set('content-type', 'application/json; charset=utf8');
-    let _data=await position_model.update(req.body);
+    let _data=await position_model.changeStatus(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
+
+const update= async (req,res)=>{
+
+    res.set('content-type', 'application/json; charset=utf8');
+    let imgsArray=[];
+    let imgUrl='';
+    const {pics}=req.body;
+    const picsName=pics.substring(12);
+    imgUrl='/uploads/logos/'+picsName;
+    imgsArray.push(imgUrl);
+    if(req.body.pics){delete req.body.pics;}
+    
+    const realData={...req.body,pics:imgsArray}
+    let _data=await position_model.update(realData);
     let _err=errorData(_data,res,'position');
     if( _err )res.render('position',{
         code:200,
@@ -105,6 +128,25 @@ const quit=async (req,res)=>{
     })
 }
 
+const addDeal= async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await deals_model.addDeal(req.body);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
+const changeDealStatus=async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await deals_model.changeDealStatus(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+} 
 
 // 订单模块
 
@@ -129,6 +171,28 @@ const getOrderList= async (req,res)=>{
         data:JSON.stringify(_data)
     })
 }
+
+// 取消订单
+const deleteOrder=async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await orders_model.deleteOrder(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
+// 改变订单的状态
+const changeOrderStatus= async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await orders_model.changeOrderStatus(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+} 
 
 
 
@@ -156,6 +220,17 @@ const getAddressList=async (req,res)=>{
     })
 }
 
+// 删除收获地址
+const deleteAddress=async (req,res)=>{
+    res.set('content-type', 'application/json; charset=utf8');
+    let _data=await address_model.deleteAddress(req.query);
+    let _err=errorData(_data,res,'position');
+    if( _err )res.render('position',{
+        code:200,
+        data:JSON.stringify(_data)
+    })
+}
+
 module.exports={
     save,
     remove,
@@ -165,8 +240,14 @@ module.exports={
     add,
     quit,
     assign,
+    addDeal,
+    changeDealStatus,
     getOrderList,
     addOrder,
     getAddressList,
-    addAddress
+    addAddress,
+    changeStatus,
+    deleteOrder,
+    changeOrderStatus,
+    deleteAddress
 }
