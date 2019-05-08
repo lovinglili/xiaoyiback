@@ -91,6 +91,24 @@ const changeBuyMoney=async (body)=>{
     })
  }
 
+ // 充值
+ const addMoney=async (body)=>{
+    const {moneyNum,nickName}=body;
+    var results= await getUser(nickName)
+    let _timestamp=Date.now();
+    let moment=Moment(_timestamp);
+    results[0].createTime=_timestamp,
+    results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
+    results[0].status=0;
+    results[0].ownMoney+=moneyNum;
+    return UserModel.updateOne({nickName: nickName},{...results}).then((result)=>{
+        return {info:{...results},isAssign:true,success:true};
+    }).catch(()=>{
+        return false;
+    })
+ }
+
+
  const changeSolderMoney=async (body)=>{
     const {price,solderName}=body;
     var results= await getUser(solderName)
@@ -128,5 +146,6 @@ module.exports ={
     add,
     assign,
     changeBuyMoney,
+    addMoney,
     changeSolderMoney
 }
