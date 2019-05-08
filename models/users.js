@@ -13,7 +13,6 @@ const assign=async (body)=>{
     // 先查询数据库中是否有该nickname，若无不让登录;
     const {nickName,password}=body;
     let results= await getUser(nickName);
-    console.log({...results[0]})
     if(results.length!==0){
         const {password:mima,nickName:name}=results[0];
         if(password===mima ){
@@ -77,14 +76,17 @@ const changeBuyMoney=async (body)=>{
     var results= await getUser(buyName)
     let _timestamp=Date.now();
     let moment=Moment(_timestamp);
+    let currentMoney=results[0].ownMoney-price;
     results[0].createTime=_timestamp,
     results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
     results[0].status=0;
     if( results[0].ownMoney<price){
         return {info:{...results},isAssign:true,success:true,message:'余额不足，请充值！'}
     }
-    results[0].ownMoney-=price;
-    return UserModel.updateOne({nickName: buyName},{...results}).then((result)=>{
+    
+    delete results[0].ownMoney;
+    results[0].ownMoney=currentMoney;
+    return UserModel.updateOne({nickName: buyName},results[0]).then((result)=>{
         return {info:{...results},isAssign:true,success:true};
     }).catch(()=>{
         return false;
@@ -96,12 +98,14 @@ const changeBuyMoney=async (body)=>{
     const {moneyNum,nickName}=body;
     var results= await getUser(nickName)
     let _timestamp=Date.now();
+    let currentMoney=results[0].ownMoney+ moneyNum;
     let moment=Moment(_timestamp);
     results[0].createTime=_timestamp,
     results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
     results[0].status=0;
-    results[0].ownMoney+=moneyNum;
-    return UserModel.updateOne({nickName: nickName},{...results}).then((result)=>{
+    delete results[0].ownMoney;
+    results[0].ownMoney=currentMoney;
+    return UserModel.updateOne({nickName: nickName},results[0]).then((result)=>{
         return {info:{...results},isAssign:true,success:true};
     }).catch(()=>{
         return false;
@@ -113,12 +117,15 @@ const changeBuyMoney=async (body)=>{
     const {price,solderName}=body;
     var results= await getUser(solderName)
     let _timestamp=Date.now();
+   
+    let currentMoney= results[0].ownMoney + +price;
     let moment=Moment(_timestamp);
     results[0].createTime=_timestamp,
     results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
     results[0].status=0;
-    results[0].ownMoney+=price;
-    return UserModel.updateOne({nickName: solderName},{...results}).then((result)=>{
+    delete results[0].ownMoney;
+    results[0].ownMoney=currentMoney;
+    return UserModel.updateOne({nickName: solderName},results[0]).then((result)=>{
         return {info:{...results},isAssign:true,success:true};
     }).catch(()=>{
         return false;
