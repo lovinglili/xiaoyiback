@@ -5,7 +5,8 @@ const Moment = require('moment')
 var UserModel=mongoose.model('users',new mongoose.Schema({
     password:String,
     nickName:String,
-    status:Number
+    status:Number,
+    ownMoney:Number,
 }));
 
 const assign=async (body)=>{
@@ -20,9 +21,8 @@ const assign=async (body)=>{
             results[0].createTime=_timestamp,
             results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
             results[0].status=1;
-        
             return UserModel.updateOne({nickName: nickName},{...results}).then(()=>{
-                return {isAssign:true,success:true};
+                return {info:{...results},isAssign:true,success:true};
             }).catch(()=>{
                 return false;
             })
@@ -47,10 +47,10 @@ const add=async (body)=>{
                 ...body,
                 status:1, // 1代表登录，0代表未登录
                 createTime:_timestamp,
+                ownMoney:1000,
                 formatTime:moment.format("YYYY-MM-DD, hh:mm")
-        
             }).save().then(()=>{
-                return {isAssign:true,success:true};
+                return {...body, status:1,ownMoney:1000,isAssign:true,success:true};
             }).catch((err)=>{
                 return false;
             })
@@ -69,6 +69,70 @@ const getUser=(nickName)=>{
         return false;
     })
  }
+
+ // 改变买家余额
+const changeBuyMoney=async (body)=>{
+    const {price,buyName}=body;
+    var results= await getUser(buyName)
+    let _timestamp=Date.now();
+    let moment=Moment(_timestamp);
+    let currentMoney=results[0].ownMoney-price;
+    results[0].createTime=_timestamp,
+    results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
+    results[0].status=0;
+    if( results[0].ownMoney<price){
+        return {info:{...results},isAssign:true,success:true,message:'余额不足，请充值！'}
+    }
+    
+    delete results[0].ownMoney;
+    results[0].ownMoney=currentMoney;
+    return UserModel.updateOne({nickName: buyName},results[0]).then((result)=>{
+        return {info:{...results},isAssign:true,success:true};
+    }).catch(()=>{
+        return false;
+    })
+ }
+
+ // 充值
+ const addMoney=async (body)=>{
+    const {moneyNum,nickName}=body;
+    var results= await getUser(nickName)
+    let _timestamp=Date.now();
+    let currentMoney=results[0].ownMoney+ moneyNum;
+    let moment=Moment(_timestamp);
+    results[0].createTime=_timestamp,
+    results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
+    results[0].status=0;
+    delete results[0].ownMoney;
+    results[0].ownMoney=currentMoney;
+    return UserModel.updateOne({nickName: nickName},results[0]).then((result)=>{
+        return {info:{...results},isAssign:true,success:true};
+    }).catch(()=>{
+        return false;
+    })
+ }
+
+
+ const changeSolderMoney=async (body)=>{
+    const {price,solderName}=body;
+    var results= await getUser(solderName)
+    let _timestamp=Date.now();
+   
+    let currentMoney= results[0].ownMoney + +price;
+    let moment=Moment(_timestamp);
+    results[0].createTime=_timestamp,
+    results[0].formatTime=moment.format("YYYY-MM-DD, hh:mm");
+    results[0].status=0;
+    delete results[0].ownMoney;
+    results[0].ownMoney=currentMoney;
+    return UserModel.updateOne({nickName: solderName},results[0]).then((result)=>{
+        return {info:{...results},isAssign:true,success:true};
+    }).catch(()=>{
+        return false;
+    })
+ }
+
+
 const quit= async (body)=>{
     const {nickName}=body;
    var results= await getUser(nickName)
@@ -87,5 +151,8 @@ const quit= async (body)=>{
 module.exports ={
     quit,
     add,
-    assign
+    assign,
+    changeBuyMoney,
+    addMoney,
+    changeSolderMoney
 }
